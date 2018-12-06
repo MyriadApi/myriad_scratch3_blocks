@@ -6,9 +6,9 @@
   "author": "Tomoaki Kanayama",
   "license": "MIT",
   "scripts": {
-    "start": "webpack && npx http-server ./dist",
+    "start": "webpack --config webpack.dev.js && npx http-server ./dist",
     "test": "npx jest --watchAll",
-    "build": "webpack"
+    "build": "webpack --config webpack.prod.js"
   },
   "devDependencies": {
     "@types/jest": "^23.3.5",
@@ -24,7 +24,9 @@
     "tsutils": "^3.1.0",
     "typescript": "^3.1.6",
     "webpack": "^4.26.0",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.1.4"
   },
   "jest": {
     "runner": "jest-runner-tslint",

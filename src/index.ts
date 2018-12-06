@@ -8,11 +8,59 @@ enum Axis {
   Z = 'z',
 }
 
+enum Toggle {
+  on = 'ON',
+  off = 'OFF',
+}
+
+enum ToggleSensor {
+  enable = 'enable',
+  disable = 'disable',
+}
+
+enum Sensors {
+  gyroscope = 'Gyroscope',
+  accelerometer = 'Accelerometer',
+  proximity = 'Proximity',
+  lightSensor = 'Light',
+  magnetometer = 'Magnetometer',
+}
+
 enum Proximity{
   isNear = 'isNear',
   maxRange = 'maxRange',
   distance = 'distance',
 }
+
+const post = (address: string, obj: {}) => {
+  const method = 'POST';
+  const body = JSON.stringify(obj);
+  const headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  return fetch(address, { method, body, headers });
+};
+
+const doToggleFlashLight = (toggle: boolean, baseAddress: string) => {
+  const obj = { enabled: toggle };
+  post(`${baseAddress}/device/light`, obj).then(() => {
+    console.log(`${toggle} light`);
+  })
+  .catch((e) => {
+    console.log(e);
+  });
+};
+
+const doVibration = (duration: number, baseAddress: string) => {
+  const obj = { duration };
+  post(`${baseAddress}/device/vibration/vibrate`, obj).then(() => {
+    console.log(`vibrate ${duration} msec`);
+  })
+  .catch((e) => {
+    console.log(e);
+  });
+};
 
 class MyriadApiBlocks {
   private runtime: any;
@@ -23,7 +71,7 @@ class MyriadApiBlocks {
     this.sensorObserver = new SensorObserver();
   }
 
-  checkServerConnected = (callback: (sensor: ResoponseSensorData)
+  mayBeServerConnected = (callback: (sensor: ResoponseSensorData)
                                 => string|number): string|number => {
     const state = store.getState();
     if (state.sensor) {
@@ -32,20 +80,43 @@ class MyriadApiBlocks {
     return 'error: you should set ip address';
   }
 
-  checkEnabledSensor = <K extends keyof ResoponseSensorData>
+  /**
+   * if sensor is enabled, get value
+   * if disabled, return error statement.
+   */
+  getSensorValueWhenEnabled = <K extends keyof ResoponseSensorData>
                     (callback: (param: ResoponseSensorData[K]) => string|number,
-                     data: ResoponseSensorData,
                      key: K) => {
-    const param = data[key];
-    if (param.enabled) {
-      return callback(param);
+    return this.mayBeServerConnected((data) => {
+      const param = data[key];
+      if (param.enabled) {
+        return callback(param);
+      }
+      return `error: please enable ${key} in your app`;
+    });
+  }
+
+  toggleFlashLight(args: any) {
+    const address = store.getState().address;
+    if (address) {
+      const toggle = args.TOGGLE;
+      switch (toggle) {
+        case Toggle.on:
+          doToggleFlashLight(true, address);
+          break;
+        case Toggle.off:
+          doToggleFlashLight(false, address);
+          break;
+        default:
+          console.log('something worng');
+      }
+    } else {
+      console.log('plase set url');
     }
-    return `error: please enable ${key} in your app`;
   }
 
   getGyroscope(args: any) {
-    return this.checkServerConnected((sensor) => {
-      return this.checkEnabledSensor(
+    return this.getSensorValueWhenEnabled(
       (param) => {
         switch (args.AXIS as Axis) {
           case Axis.X:
@@ -58,13 +129,10 @@ class MyriadApiBlocks {
             return 'error';
         }
       },
-      sensor,
       'gyroscope');
-    });
   }
   getAccelerometer(args: any) {
-    return this.checkServerConnected((sensor) => {
-      return this.checkEnabledSensor(
+    return this.getSensorValueWhenEnabled(
       (param) => {
         switch (args.AXIS as Axis) {
           case Axis.X:
@@ -77,13 +145,10 @@ class MyriadApiBlocks {
             return 'error';
         }
       },
-      sensor,
       'accelerometer');
-    });
   }
   getMagnetometer(args: any) {
-    return this.checkServerConnected((sensor) => {
-      return this.checkEnabledSensor(
+    return this.getSensorValueWhenEnabled(
       (param) => {
         switch (args.AXIS as Axis) {
           case Axis.X:
@@ -96,23 +161,17 @@ class MyriadApiBlocks {
             return 'error';
         }
       },
-      sensor,
       'magnetometer');
-    });
   }
   getLight() {
-    return this.checkServerConnected((sensor) => {
-      return this.checkEnabledSensor(
+    return this.getSensorValueWhenEnabled(
       (param) => {
         return param.value;
       },
-      sensor,
       'light');
-    });
   }
   getProximity(args: any) {
-    return this.checkServerConnected((sensor) => {
-      return this.checkEnabledSensor(
+    return this.getSensorValueWhenEnabled(
       (param) => {
         switch (args.PROXIMITY as Proximity) {
           case Proximity.isNear:
@@ -125,13 +184,13 @@ class MyriadApiBlocks {
             return 'error';
         }
       },
-      sensor,
       'proximity');
-    });
   }
   setIpAddress(args:any) {
-    const ipaddress = (() => {
-      const ip = args.IP as string;
+    const address = (() => {
+      const ipStr = args.IP as string;
+      // If the end of the character is a /, delete it
+      const ip = (ipStr).slice(-1) === '/' ? ipStr.slice(0, -1) : ipStr;
       const http = 'http://';
       const https = 'https://';
       if (ip.includes(http) || ip.includes(https)) {
@@ -140,7 +199,46 @@ class MyriadApiBlocks {
       return http + ip;
     })();
     this.sensorObserver.stopObserving();
-    this.sensorObserver.startObserving(ipaddress, store.newState, store.getState);
+    this.sensorObserver.startObserving(address, store.newState);
+    store.newState({ address });
+  }
+
+  toggleSensor(args: any) {
+    const enabled = args.TOGGLE as ToggleSensor;
+    const sensor = args.SENSORS as Sensors;
+    const getSensorPath = (sensor: Sensors): string => {
+      switch (sensor) {
+        case Sensors.accelerometer:
+          return '/accelerometer';
+        case Sensors.gyroscope:
+          return '/gyroscope';
+        case Sensors.lightSensor:
+          return '/light';
+        case Sensors.magnetometer:
+          return '/magnetometer';
+        case Sensors.proximity:
+          return '/proximity';
+        default:
+          return '';
+      }
+    };
+    const obj = {
+      enabled: enabled === ToggleSensor.enable ? true : false,
+    };
+    const baseAddress = store.getState().address;
+    if (baseAddress) {
+      const path = `${baseAddress}/sensor${getSensorPath(sensor)}`;
+      post(path, obj);
+    }
+  }
+
+  doVibration(args: any) {
+    const sec = args.DURATION as number;
+    const msec = sec * 1000;
+    const address = store.getState().address;
+    if (address) {
+      doVibration(msec, address);
+    }
   }
 
   axisMenu() {
@@ -177,20 +275,114 @@ class MyriadApiBlocks {
     ];
   }
 
+  toggleMenu() {
+    return [
+      {
+        value: Toggle.on,
+        text: 'ON',
+      },
+      {
+        value: Toggle.off,
+        text: 'OFF',
+      },
+    ];
+  }
+
+  toggleSensorMenu() {
+    return [
+      {
+        value: ToggleSensor.enable,
+        text: ToggleSensor.enable,
+      },
+      {
+        value: ToggleSensor.disable,
+        text: ToggleSensor.disable,
+      },
+    ];
+  }
+
+  sensorsMenu() {
+    return [
+      {
+        value: Sensors.accelerometer,
+        text: Sensors.accelerometer,
+      },
+      {
+        value: Sensors.magnetometer,
+        text: Sensors.magnetometer,
+      },
+      {
+        value: Sensors.gyroscope,
+        text: Sensors.gyroscope,
+      },
+      {
+        value: Sensors.lightSensor,
+        text: Sensors.lightSensor,
+      },
+      {
+        value: Sensors.proximity,
+        text: Sensors.proximity,
+      },
+    ];
+  }
+
   getInfo() {
     return {
       id: 'myriadApiBlocks',
-      name: 'Myriad api blocks',
-      docsURI: 'https://....',
+      name: 'Myriad Scratch blocks',
+      docsURI: '',
       blocks: [
         {
           opcode: 'setIpAddress',
           blockType: 'command',
-          text: 'set ip address [IP]',
+          text: 'set API URL [IP]',
           arguments: {
             IP: {
               type: 'string',
               defaultValue: 'http://localhost:8080',
+            },
+          },
+          filter: ['sprite', 'stage'],
+        },
+        {
+          opcode: 'toggleSensor',
+          blockType: 'command',
+          text: '[TOGGLE] [SENSORS] sensor',
+          arguments: {
+            TOGGLE: {
+              type: 'string',
+              menu: 'toggleSensors',
+              defaultValue: ToggleSensor.enable,
+            },
+            SENSORS: {
+              type: 'string',
+              menu: 'sensors',
+              defaultValue: Sensors.accelerometer,
+            },
+          },
+          filter: ['sprite', 'stage'],
+        },
+        {
+          opcode: 'doVibration',
+          blockType: 'command',
+          text: 'Vibrate for [DURATION] seconds.',
+          arguments: {
+            DURATION: {
+              type: 'number',
+              defaultValue: 1.0,
+            },
+          },
+          filter: ['sprite', 'stage'],
+        },
+        {
+          opcode: 'toggleFlashLight',
+          blockType: 'command',
+          text: 'Turn [TOGGLE] flash light',
+          arguments: {
+            TOGGLE: {
+              type: 'string',
+              menu: 'toggle',
+              defaultValue: Toggle.on,
             },
           },
           filter: ['sprite', 'stage'],
@@ -249,7 +441,7 @@ class MyriadApiBlocks {
           branchCount: 0,
           isTerminal: true,
           blockAllThreads: false,
-          text: 'Proximity',
+          text: 'Proximity [PROXIMITY]',
           arguments: {
             PROXIMITY: {
               type: 'string',
@@ -272,14 +464,15 @@ class MyriadApiBlocks {
       menus: {
         axis: this.axisMenu(),
         proximity: this.proximityMenu(),
+        toggle: this.toggleMenu(),
+        toggleSensors: this.toggleSensorMenu(),
+        sensors: this.sensorsMenu(),
       },
       translation_map: {
         ja: {
           extensionName: 'Myriad Api Blocks',
           getGyroscope: 'ジャイロスコープ [AXIS] 軸の値 ',
           'myReporter.TEXT_default': 'Text',
-          menuA_item1: 'Artikel eins',
-          menuB_example: 'Beispiel',
           'myReporter.result': 'Buchstabe {LETTER_NUM} von {TEXT} ist {LETTER}.',
         },
       },

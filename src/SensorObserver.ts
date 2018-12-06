@@ -4,7 +4,7 @@ import { State } from './store';
 export default class SensorObserver {
   private observingId?: NodeJS.Timeout;
 
-  startObserving(address: string, newState: (s: State) => void, getState: () => State) {
+  startObserving(address: string, newState: (s: State) => void) {
     this.observingId = setInterval(
         () => {
           fetch(`${address}/sensor`)
