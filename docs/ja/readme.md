@@ -3,27 +3,27 @@ MyriadApiを使って、スマートフォンとScratch3をつなげて遊んで
 
 ### 準備
 - Scrach3   
-公式のScrach3β版はカスタム拡張機能を利用出来ません。ですが、SheepTesterさんが拡張機能を有効にしたScratch3を非公式にリリースしています。今回はこれを使います。https://sheeptester.github.io/scratch-gui/
-- 拡張ブロック
-　Scrach3の拡張ブロックです。
-  下記のURLをメモしてください。
+公式のScrach3β版はカスタム拡張機能を利用出来ません。ですが、SheepTesterさんが拡張機能を有効にしたScratch3を非公式にリリースしています。今回はこれを使います。  
+   [https://sheeptester.github.io/scratch-gui/](https://sheeptester.github.io/scratch-gui/)
+- 拡張ブロック  
+今回使用するScrach3の拡張ブロックです。下記のURLをメモしてください。
   https://myriadapi.github.io/myriad_scratch3_blocks/js/blocks.js
 - Myriad Api  
   スマートフォンとScratchを接続するために必要なアプリです。  
-  PlayStoreよりダウンロードしてください。
+  PlayStoreよりダウンロードしてください。  
   <img src="./images/ps.png" width="200px"/>
 
 ### やってみよう
-このやってみようでは「光センサーの値を読み取り、スクラッチキャットにしゃべらせる」という事をやります。 
+ここでは「光センサーの値を読み取り、スクラッチキャットにしゃべらせる」という事をやります。 
 
-1. 拡張機能に対応したScratch3を開いてください
-   https://sheeptester.github.io/scratch-gui/
+1. 拡張機能に対応したScratch3を↓URLから開いてください  
+   [https://sheeptester.github.io/scratch-gui/](https://sheeptester.github.io/scratch-gui/)
 1. Scratchの左下にある拡張追加をクリックしてください。  
 <img src="./images/addExtension.PNG" width="400">
 1. 拡張機能のChoose Extensionを選択してください。(SHeep testerさんのScrach3の場合)
 <img src="./images/choose.PNG" width="400"/>
 1. URLの入力ダイアログが表示されるので、下記のURLをコピーして入力してください
-  https://myriadapi.github.io/myriad_scratch3_blocks/js/blocks.js
+  [https://myriadapi.github.io/myriad_scratch3_blocks/js/blocks.js](https://myriadapi.github.io/myriad_scratch3_blocks/js/blocks.js)
 1.  「作ったブロック」下にMyriad Scratch3 blocksと表示されればOKです。  
 <img src="./images/successImportBlocks.PNG" width="400"/>
 1. お決まりのイベントにある「緑旗が押されたとき」のブロックを追加してください   
@@ -51,3 +51,8 @@ MyriadApiを使って、スマートフォンとScratch3をつなげて遊んで
 1. 実行してみましょう。緑の旗を押してください。ネコが1秒ごとにセンサーの値を読み上げてくれます。スマートフォンの上に手をかざしたり、部屋の照明をつけたり消したりするとネコがしゃべる値が変わると思います。
 <img src="./images/readSensor.PNG" width="400"/>
 1. これでチュートリアルは完了です。Myriad Scratch Blocksには他にもフラッシュライトを点灯させたり、様々なセンサーの値を読み取る事が出来るので遊んでみてください。
+  
+  
+    
+### リンク  
+このスクラッチブロックのソースコードは[ここ](https://github.com/MyriadApi/myriad_scratch3_blocks)に公開しています。
