@@ -39,7 +39,7 @@ const post = (address: string, obj: {}) => {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
-  return fetch(address, { method, body, headers });
+  return fetch(address, { method, body, headers, mode: 'cors' });
 };
 
 const doToggleFlashLight = (toggle: boolean, baseAddress: string) => {
@@ -389,7 +389,7 @@ class MyriadApiBlocks {
         },
         {
           opcode: 'getGyroscope',
-          blockType: Scratch.BlockType.REPORTER,
+          blockType: 'reporter',
           branchCount: 0,
           isTerminal: true,
           blockAllThreads: false,
@@ -405,7 +405,7 @@ class MyriadApiBlocks {
         },
         {
           opcode: 'getAccelerometer',
-          blockType: Scratch.BlockType.REPORTER,
+          blockType: 'reporter',
           branchCount: 0,
           isTerminal: true,
           blockAllThreads: false,
@@ -421,7 +421,7 @@ class MyriadApiBlocks {
         },
         {
           opcode: 'getMagnetometer',
-          blockType: Scratch.BlockType.REPORTER,
+          blockType: 'reporter',
           branchCount: 0,
           isTerminal: true,
           blockAllThreads: false,
@@ -437,7 +437,7 @@ class MyriadApiBlocks {
         },
         {
           opcode: 'getProximity',
-          blockType: Scratch.BlockType.REPORTER,
+          blockType: 'reporter',
           branchCount: 0,
           isTerminal: true,
           blockAllThreads: false,
@@ -453,7 +453,7 @@ class MyriadApiBlocks {
         },
         {
           opcode: 'getLight',
-          blockType: Scratch.BlockType.REPORTER,
+          blockType: 'reporter',
           branchCount: 0,
           isTerminal: true,
           blockAllThreads: false,
@@ -482,3 +482,4 @@ class MyriadApiBlocks {
 }
 
 Scratch.extensions.register(new MyriadApiBlocks());
+module.exports = MyriadApiBlocks;

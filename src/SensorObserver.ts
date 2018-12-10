@@ -7,7 +7,7 @@ export default class SensorObserver {
   startObserving(address: string, newState: (s: State) => void) {
     this.observingId = setInterval(
         () => {
-          fetch(`${address}/sensor`)
+          fetch(`${address}/sensor`, { mode: 'cors' })
             .then((res) => {
               return res.json();
             })
