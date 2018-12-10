@@ -20,7 +20,7 @@ MyriadApiを使って、スマートフォンとScratch3をつなげて遊んで
    [http://aknow2.com/scratch/](http://aknow2.com/scratch/)
 1. Scratchの左下にある拡張追加をクリックしてください。  
 <img src="./images/addExtension.PNG" width="400">
-1. 拡張機能のChoose Extensionを選択してください。(SHeep testerさんのScrach3の場合)
+1. 拡張機能のChoose Extensionを選択してください。
 <img src="./images/choose.PNG" width="400"/>
 1. URLの入力ダイアログが表示されるので、下記のURLをコピーして入力してください
   [https://myriadapi.github.io/myriad_scratch3_blocks/js/blocks.js](https://myriadapi.github.io/myriad_scratch3_blocks/js/blocks.js)
