@@ -3,8 +3,8 @@ MyriadApiを使って、スマートフォンとScratch3をつなげて遊んで
 
 ### 準備
 - Scrach3   
-公式のScrach3β版はカスタム拡張機能を利用出来ません。ですが、SheepTesterさんが拡張機能を有効にしたScratch3を非公式にリリースしています。今回はこれを使います。  
-   [https://sheeptester.github.io/scratch-gui/](https://sheeptester.github.io/scratch-gui/)
+公式のScrach3β版はカスタム拡張機能を利用出来ません。なので、こちらに拡張機能を追加できるバージョンを準備しましたので、こちらをお使いください。  
+   [http://aknow2.com/scratch/](http://aknow2.com/scratch/)
 - 拡張ブロック  
 今回使用するScrach3の拡張ブロックです。下記のURLをメモしてください。
   https://myriadapi.github.io/myriad_scratch3_blocks/js/blocks.js
@@ -16,8 +16,8 @@ MyriadApiを使って、スマートフォンとScratch3をつなげて遊んで
 ### やってみよう
 ここでは「光センサーの値を読み取り、スクラッチキャットにしゃべらせる」という事をやります。 
 
-1. 拡張機能に対応したScratch3を↓URLから開いてください  
-   [https://sheeptester.github.io/scratch-gui/](https://sheeptester.github.io/scratch-gui/)
+1. 拡張機能に対応したScratch3を↓のURLから開いてください  
+   [http://aknow2.com/scratch/](http://aknow2.com/scratch/)
 1. Scratchの左下にある拡張追加をクリックしてください。  
 <img src="./images/addExtension.PNG" width="400">
 1. 拡張機能のChoose Extensionを選択してください。(SHeep testerさんのScrach3の場合)
