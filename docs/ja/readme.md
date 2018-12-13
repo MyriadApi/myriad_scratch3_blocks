@@ -51,8 +51,9 @@ MyriadApiを使って、スマートフォンとScratch3をつなげて遊んで
 1. 実行してみましょう。緑の旗を押してください。ネコが1秒ごとにセンサーの値を読み上げてくれます。スマートフォンの上に手をかざしたり、部屋の照明をつけたり消したりするとネコがしゃべる値が変わると思います。
 <img src="./images/readSensor.PNG" width="400"/>
 1. これでチュートリアルは完了です。Myriad Scratch Blocksには他にもフラッシュライトを点灯させたり、様々なセンサーの値を読み取る事が出来るので遊んでみてください。
-  
-  
+    
     
 ### リンク  
-このスクラッチブロックのソースコードは[ここ](https://github.com/MyriadApi/myriad_scratch3_blocks)に公開しています。
+- このスクラッチブロックのソースコードは[ここ](https://github.com/MyriadApi/myriad_scratch3_blocks)に公開しています。  
+
+- [API リファレンス](https://myriadapi.github.io/ja/)

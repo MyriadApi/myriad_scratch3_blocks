@@ -17,12 +17,12 @@ export default class SensorObserver {
                 sensor: data,
               });
             })
-            .catch(() => {
-              console.log('error');
+            .catch((e) => {
+              console.log(e);
               newState({ isConnected: false });
             });
         },
-        50);
+        30);
   }
 
   stopObserving() {
