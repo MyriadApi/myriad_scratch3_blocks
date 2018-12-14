@@ -18,7 +18,7 @@ MyriadApiを使って、スマートフォンとScratch3をつなげて遊んで
 
 1. 拡張機能に対応したScratch3を↓のURLから開いてください  
    [http://aknow2.com/scratch/](http://aknow2.com/scratch/)
-   ※アプリがHttpsにまだ対応していないので、httpのバージョンになっています。
+   ※httpでご利用ください。httpsですとアプリがまだ対応していないので上手く動作しません。
 1. Scratchの左下にある拡張追加をクリックしてください。  
 <img src="./images/addExtension.PNG" width="400">
 1. 拡張機能のChoose Extensionを選択してください。
@@ -35,7 +35,7 @@ MyriadApiを使って、スマートフォンとScratch3をつなげて遊んで
 1. 一番上にある、「set API URL」を追加してください。  
 <img src="./images/setapiurl.PNG" width="400"/>
 1. ここで、準備の時にダウンロードしたアプリを起動してください。起動出来たらアプリ上部に表示されているAddressの「http://〇〇〇 」の部分をメモしてください。  
-1. 「set API URL」のテキストボックスに７でメモしたアプリに表示されている「http://○○○」を入力してください。URLを入力することでスマートフォンとScratchの接続が行われます。
+1. 「set API URL」のテキストボックスにメモしたアプリに表示されている「http://○○○」を入力してください。このURLを入力することでスマートフォンとScratchの接続が行われます。
 1. 次に明るさをはかるためのライトセンサーを有効してみましょう。↓のブロックを追加してください。 
 <img src="./images/enablesensor.PNG" width="400"/>
 1. 追加したブロックの選択メニューから「Light」を選択してください。 
