@@ -31,12 +31,12 @@ MyriadApiを使って、スマートフォンとScratch3をつなげて遊んで
 <img src="./images/addgreenflag.PNG" width="400"/>
 
 <img src="./images/address.jpg" width="400"/>
-1. 再びScratch3の画面に戻り、「作ったブロック」下にある「Myriad Scratch3 blocks」を選択してください。  
+1. 再びScratch3の画面に戻り、「作ったブロック」下にある「Myriad Scratch blocks」を選択してください。  
 1. 一番上にある、「set API URL」を追加してください。  
 <img src="./images/setapiurl.PNG" width="400"/>
 1. ここで、準備の時にダウンロードしたアプリを起動してください。起動出来たらアプリ上部に表示されているAddressの「http://〇〇〇 」の部分をメモしてください。  
 1. 「set API URL」のテキストボックスにメモしたアプリに表示されている「http://○○○」を入力してください。このURLを入力することでスマートフォンとScratchの接続が行われます。
-1. 次に明るさをはかるためのライトセンサーを有効してみましょう。↓のブロックを追加してください。 
+1. 次に明るさセンサーを有効してみましょう。「Myriad Scratch blocks」↓のブロックを追加してください。 
 <img src="./images/enablesensor.PNG" width="400"/>
 1. 追加したブロックの選択メニューから「Light」を選択してください。 
 <img src="./images/selectLight.png" width="400"/>
