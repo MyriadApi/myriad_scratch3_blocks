@@ -175,7 +175,7 @@ class MyriadApiBlocks {
       (param) => {
         switch (args.PROXIMITY as Proximity) {
           case Proximity.isNear:
-            return param.isNear ? 'near' : 'far';
+            return param.isNear ? 1 : 0;
           case Proximity.distance:
             return param.value;
           case Proximity.maxRange:
@@ -262,7 +262,7 @@ class MyriadApiBlocks {
     return [
       {
         value: Proximity.isNear,
-        text: 'Near/Far',
+        text: 'Near(1)/Far(0)',
       },
       {
         value: Proximity.maxRange,
@@ -292,11 +292,11 @@ class MyriadApiBlocks {
     return [
       {
         value: ToggleSensor.enable,
-        text: ToggleSensor.enable,
+        text: 'ON',
       },
       {
         value: ToggleSensor.disable,
-        text: ToggleSensor.disable,
+        text: 'OFF',
       },
     ];
   }
@@ -326,7 +326,7 @@ class MyriadApiBlocks {
     ];
   }
 
-  getInfo() {
+  getDefaultInfo() {
     return {
       id: 'myriadApiBlocks',
       name: 'Myriad Scratch blocks',
@@ -347,7 +347,7 @@ class MyriadApiBlocks {
         {
           opcode: 'toggleSensor',
           blockType: 'command',
-          text: '[TOGGLE] [SENSORS] sensor',
+          text: 'Turn [TOGGLE] [SENSORS] sensor',
           arguments: {
             TOGGLE: {
               type: 'string',
@@ -470,14 +470,83 @@ class MyriadApiBlocks {
       },
       translation_map: {
         ja: {
-          extensionName: 'Myriad Api Blocks',
+          extensionName: 'Myriad Scratch Blocks',
+          proximity_isNear: '遠い(0)/近い(1)',
+          proximity_maxRange: '最大距離',
+          proximity_range: '距離',
+          toggle_ON: 'オン',
+          toggle_OFF: 'オフ',
+          toggleSensors_enable: 'オン',
+          toggleSensors_disable: 'オフ',
+          sensors_gyroscope: 'ジャイロスコープ',
+          sensors_magnetometer: '磁力',
+          sensors_light: '明るさ',
+          sensors_proximity: '近接',
+          sensors_Accelerometer: '近接',
           getGyroscope: 'ジャイロスコープ [AXIS] 軸の値 ',
-          'myReporter.TEXT_default': 'Text',
-          'myReporter.result': 'Buchstabe {LETTER_NUM} von {TEXT} ist {LETTER}.',
+          getLight: '明るさセンサー',
+          getMagnetometer: '磁力センサー [AXIS] 軸の値 ',
+          getAccelerometer: '傾きセンサー [AXIS] 軸の値 ',
+          getProximity: '近接センサー [PROXIMITY] の値 ',
+          toggleFlashLight: 'フラッシュライトを[TOGGLE]する',
+          doVibration: '[DURATION]秒間、ブルブル',
+          toggleSensor: '[SENSORS]センサーを[TOGGLE]する',
         },
       },
       targetTypes: [],
     };
+  }
+
+  translate(info: any, translationMap: any) {
+    const keys = Object.keys(translationMap);
+    // translate blocks
+    info.blocks.forEach((block: any) => {
+      keys.forEach((key) => {
+        if (block.opcode === key) {
+          block.text = translationMap[key];
+        }
+      });
+    });
+    const menusTranslationList = keys
+      .map((key) => {
+        const menusInfo = key.split('_');
+        if (menusInfo.length !== 2) {
+          return null;
+        }
+        return {
+          key: menusInfo[0],
+          value: menusInfo[1],
+          text: translationMap[key],
+        };
+      })
+      .filter((menu: any) => menu !== null);
+    // translate menus
+    const menus = info.menus;
+    Object
+      .keys(menus)
+      .forEach((menuKey: string) => {
+        const menu = menus[menuKey];
+        menusTranslationList.forEach((translateSet: any) => {
+          menu.forEach((item: any) => {
+            if (menuKey === translateSet.key && translateSet.value === item.value) {
+              item.text = translateSet.text;
+            }
+          });
+        });
+      });
+  }
+
+  getInfo() {
+    const locale = navigator.language;
+    const info = this.getDefaultInfo();
+    const keys = Object.keys(info.translation_map);
+    keys.forEach((key) => {
+      if (key === locale) {
+        const translationMap = info.translation_map[key];
+        this.translate(info, translationMap);
+      }
+    });
+    return this.getDefaultInfo();
   }
 }
 

@@ -30,4 +30,5 @@ export default class SensorObserver {
       clearInterval(this.observingId);
     }
   }
+
 }
