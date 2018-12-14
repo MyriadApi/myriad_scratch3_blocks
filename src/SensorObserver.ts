@@ -22,7 +22,7 @@ export default class SensorObserver {
               newState({ isConnected: false });
             });
         },
-        30);
+        20);
   }
 
   stopObserving() {
