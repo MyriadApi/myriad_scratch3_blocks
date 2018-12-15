@@ -326,11 +326,11 @@ class MyriadApiBlocks {
     ];
   }
 
-  getDefaultInfo() {
+  getInfo() {
     return {
       id: 'myriadApiBlocks',
       name: 'Myriad Scratch blocks',
-      docsURI: '',
+      docsURI: 'https://myriadapi.github.io/myriad_scratch3_blocks/ja',
       blocks: [
         {
           opcode: 'setIpAddress',
@@ -473,7 +473,8 @@ class MyriadApiBlocks {
           extensionName: 'Myriad Scratch Blocks',
           proximity_isNear: '遠い(0)/近い(1)',
           proximity_maxRange: '最大距離',
-          proximity_range: '距離',
+          proximity_distance: '距離',
+          setIpAddress: 'APIのURL設定[IP]',
           toggle_ON: 'オン',
           toggle_OFF: 'オフ',
           toggleSensors_enable: 'オン',
@@ -497,58 +498,8 @@ class MyriadApiBlocks {
     };
   }
 
-  translate(info: any, translationMap: any) {
-    const keys = Object.keys(translationMap);
-    // translate blocks
-    info.blocks.forEach((block: any) => {
-      keys.forEach((key) => {
-        if (block.opcode === key) {
-          block.text = translationMap[key];
-        }
-      });
-    });
-    const menusTranslationList = keys
-      .map((key) => {
-        const menusInfo = key.split('_');
-        if (menusInfo.length !== 2) {
-          return null;
-        }
-        return {
-          key: menusInfo[0],
-          value: menusInfo[1],
-          text: translationMap[key],
-        };
-      })
-      .filter((menu: any) => menu !== null);
-    // translate menus
-    const menus = info.menus;
-    Object
-      .keys(menus)
-      .forEach((menuKey: string) => {
-        const menu = menus[menuKey];
-        menusTranslationList.forEach((translateSet: any) => {
-          menu.forEach((item: any) => {
-            if (menuKey === translateSet.key && translateSet.value === item.value) {
-              item.text = translateSet.text;
-            }
-          });
-        });
-      });
-  }
-
-  getInfo() {
-    const locale = navigator.language;
-    const info = this.getDefaultInfo();
-    const keys = Object.keys(info.translation_map);
-    keys.forEach((key) => {
-      if (key === locale) {
-        const translationMap = info.translation_map[key];
-        this.translate(info, translationMap);
-      }
-    });
-    return this.getDefaultInfo();
-  }
 }
 
+console.log(Scratch);
 Scratch.extensions.register(new MyriadApiBlocks());
 module.exports = MyriadApiBlocks;
